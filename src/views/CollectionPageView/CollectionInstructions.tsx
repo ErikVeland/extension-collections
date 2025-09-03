@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button } from 'react-bootstrap';
 import { types, util } from 'vortex-api';
 import { DEFAULT_INSTRUCTIONS } from '../../constants';
-import * as ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 
 import { isEmpty } from '../../util/util';
 
@@ -56,7 +56,7 @@ function Instructions(props: IInstructionsProps) {
     (required.length === 0) &&
     (optional.length === 0) ? 
     t(DEFAULT_INSTRUCTIONS) :
-     collection.attributes?.installInstructions
+    collection.attributes?.installInstructions
 
   return (
     <>    
@@ -75,9 +75,9 @@ function Instructions(props: IInstructionsProps) {
                   <tr key={iter.name}>
                     <td className='collection-mod-name'>{iter.name}</td>
                     <td className='collection-mod-instructions'>
-                    <ReactMarkdown allowedElements={['p', 'br', 'a', 'em', 'strong']} unwrapDisallowed={true}>
-                    {iter.instructions}
-                    </ReactMarkdown>                      
+                      <ReactMarkdown allowedElements={['p', 'br', 'a', 'em', 'strong']} unwrapDisallowed={true}>
+                        {iter.instructions}
+                      </ReactMarkdown>                      
                     </td>
                     <td className='collection-mod-actions'>
                       <Button data-modid={iter.mod?.id} onClick={onToggleInstructions}>
@@ -100,9 +100,9 @@ function Instructions(props: IInstructionsProps) {
                   <tr key={iter.name}>
                     <td className='collection-mod-name'>{iter.name}</td>
                     <td className='collection-mod-instructions'>
-                    <ReactMarkdown allowedElements={['p', 'br', 'a', 'em', 'strong']} unwrapDisallowed={true}>
-                    {iter.instructions}
-                    </ReactMarkdown>     
+                      <ReactMarkdown allowedElements={['p', 'br', 'a', 'em', 'strong']} unwrapDisallowed={true}>
+                        {iter.instructions}
+                      </ReactMarkdown>     
                     </td>
                     <td className='collection-mod-actions'>
                       <Button data-modid={iter.mod?.id} onClick={onToggleInstructions}>
