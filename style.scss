@@ -1,3 +1,10 @@
+@import '../../src/stylesheets/variables.scss';
+@import '../../src/stylesheets/details.scss';
+@import '../../src/stylesheets/style.scss';
+@import '../../src/stylesheets/bootstrap/bootstrap/variables';
+@import '../../src/stylesheets/bootstrap/bootstrap/mixins';
+@import '../../src/stylesheets/bootstrap/bootstrap/type';
+
 $border-radius: 8px;
 $collection-thumbnail-width: 230px;
 $collection-thumbnail-height: 288px;
