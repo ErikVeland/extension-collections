@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as nexusApi from '@nexusmods/nexus-api';
-import * as Promise from 'bluebird';
+import * as Bluebird from 'bluebird';
+const Promise = Bluebird;
 import * as path from 'path';
 import { actions, log, selectors, types, util } from 'vortex-api';
 import { setPendingVote } from '../actions/persistent';
@@ -36,7 +37,8 @@ class InstallDriver {
   private mInfoCache: InfoCache;
   private mTotalSize: number;
   private mOnStop: () => void;
-  private mPrepare: Promise<void> = Promise.resolve();
+  // Use Bluebird internally to match existing code in this extension
+  private mPrepare: Bluebird<void> = Promise.resolve();
   private get requiredMods() {
     return this.mDependentMods.filter(_ => _.type === 'requires');
   }
@@ -137,8 +139,8 @@ class InstallDriver {
       });
   }
 
-  public async prepare(func: () => Promise<void>) {
-    this.mPrepare = this.mPrepare.then(func);
+  public async prepare(func: () => Bluebird<void> | Promise<void>) {
+    this.mPrepare = this.mPrepare.then(() => func());
   }
 
   public async query(profile: types.IProfile, collection: types.IMod) {
