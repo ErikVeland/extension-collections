@@ -161,12 +161,12 @@ class TweakList extends ComponentEx<IProps, IComponentState> {
                   <th className='header-tweak-name'>{t('Tweak Name')}</th>
                   <th className='header-filename'>{t('Ini File')}</th>
                   <th className='header-edit'>
-                      {t('Edit')}
-                      <More id='edit-ini-file' name={t('Edit Ini File')}>
+                    {t('Edit')}
+                    <More id='edit-ini-file' name={t('Edit Ini File')}>
                       {t('"Edit" allows you to input the ini tweak you want to '
                        + 'apply to the target ini file. Please provide the section as '
                        + 'well as your tweak(s). e.g.:\n\n[General]\nsIntroSequence=0')}
-                      </More>
+                    </More>
                   </th>
                 </tr>
               </thead>

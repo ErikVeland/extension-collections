@@ -52,7 +52,7 @@ export async function readCollection(api: types.IExtensionApi,
   const readErrors = validateICollection(collection);
   if (readErrors.length > 0) {
     api.showErrorNotification('Collection validation mismatch',
-      'There was a validation issue with this collection. '
+                              'There was a validation issue with this collection. '
       + 'During the testing phase, this is likely caused by the checks being too strict and '
       + 'the collection itself should still work correctly.\n'
       + 'To help us improve the validation, please report this error once on each '

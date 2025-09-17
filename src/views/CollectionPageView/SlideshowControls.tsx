@@ -63,7 +63,7 @@ function SlideshowControls(props: ISlideshowControlsProps) {
         onClick={prev}
       />
       {t('{{pos}} of {{count}}',
-        { replace: { pos: idx + 1, count: numItems } })}
+         { replace: { pos: idx + 1, count: numItems } })}
       <tooltip.IconButton
         icon='collection-next'
         tooltip={t('Show next mod')}

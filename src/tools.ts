@@ -69,8 +69,8 @@ function updatePaths(tool: ICollectionToolEx, gamePath: string) {
   return {
     ...tool,
     exe: path.isAbsolute(tool.exe)
-    ? tool.exe
-    : path.join(gamePath, tool.exe),
+      ? tool.exe
+      : path.join(gamePath, tool.exe),
   };
 }
 
@@ -94,7 +94,7 @@ async function cloneTools(api: types.IExtensionApi,
                 && (normalizePath(knownTools[iter].path) === normalizePath(exePath)
                  || knownTools[iter].name === tool.name));
   })
-  .filter(iter => iter !== undefined);
+    .filter(iter => iter !== undefined);
 
   const attributes = util.setSafe(to.attributes.collection, ['includedTools'], includedTools);
   api.store.dispatch(actions.setModAttribute(gameId, to.id, 'collection',

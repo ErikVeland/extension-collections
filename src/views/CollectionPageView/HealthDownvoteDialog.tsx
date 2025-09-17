@@ -42,8 +42,8 @@ function HealthDownvoteDialog(props: IHealthDownvoteDialogProps) {
   const collectionId:string = useSelector((state:any) => state.session.collections.healthDownvoteDialog ?? undefined);
 
   const collection:IMod = (collectionId !== undefined)
-  ? state.persistent.mods[gameId]?.[collectionId]
-  : undefined;
+    ? state.persistent.mods[gameId]?.[collectionId]
+    : undefined;
   
   let revisionInfo: IRevision;
   let collectionInfo;

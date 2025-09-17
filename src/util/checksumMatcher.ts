@@ -5,8 +5,8 @@ import { fs, log, selectors, types, util } from 'vortex-api';
 import { ReplicateHashMismatchError } from '../util/errors';
 
 export async function matchChecksums(api: types.IExtensionApi,
-                               gameId: string,
-                               modId: string): Promise<void> {
+                                     gameId: string,
+                                     modId: string): Promise<void> {
   const state = api.getState();
   const mod = state.persistent.mods[gameId][modId];
   if (!mod?.archiveId) {

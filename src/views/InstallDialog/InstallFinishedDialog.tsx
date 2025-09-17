@@ -129,7 +129,7 @@ function InstallFinishedDialog(props: IInstallFinishedDialogProps) {
           <div className='collection-finished-optionals'>
             <div className='collection-finished-optionals-text'>
               {t('{{numOptionals}} optional mods available',
-                { replace: { numOptionals: optionals.length }})}
+                 { replace: { numOptionals: optionals.length }})}
             </div>
             <p>
               {t('This collection has {{count}} optional mods which are not required to '

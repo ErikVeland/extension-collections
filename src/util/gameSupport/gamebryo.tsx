@@ -215,7 +215,7 @@ export async function parser(api: types.IExtensionApi,
         });
       });
       return prev;
-  }, []));
+    }, []));
 }
 
 interface ILocalizedMessage {
@@ -452,13 +452,13 @@ export function Interface(props: IExtendedInterfaceProps): JSX.Element {
       </ControlLabel>
       {(pluginRules !== null) ? (
         <ListGroup>
-            {pluginRules.map(rule => (
-              <PluginRule
-                t={t}
-                key={`${rule.name}_after_${rule.ref}`}
-                rule={rule}
-                onRemove={removeRule}
-              />))}
+          {pluginRules.map(rule => (
+            <PluginRule
+              t={t}
+              key={`${rule.name}_after_${rule.ref}`}
+              rule={rule}
+              onRemove={removeRule}
+            />))}
         </ListGroup>
       ) : <Spinner />}
       {(groupAssignments !== null) ? (

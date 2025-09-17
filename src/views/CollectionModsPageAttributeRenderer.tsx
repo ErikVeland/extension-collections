@@ -64,9 +64,9 @@ function CollectionModsPageAttributeRenderer(props: IProps) {
         </FlexLayout.Fixed>
         {((count > 1) && !detailCell) ? (
           <CollectionCount collectionNames={collectionNames} modId={modId} />
-         ) : null}
+        ) : null}
       </FlexLayout>
-  ) : null;
+    ) : null;
 }
 
 export default CollectionModsPageAttributeRenderer as React.ComponentType<IBaseProps>;

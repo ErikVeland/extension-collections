@@ -129,7 +129,7 @@ class CollectionThumbnail extends ComponentEx<IProps, { updating: boolean }> {
 
   public render(): JSX.Element {
     const { t, collection, details, infoCache,
-            incomplete, mods, onEdit, profile, forceRevisionDisplay } = this.props;
+      incomplete, mods, onEdit, profile, forceRevisionDisplay } = this.props;
 
     if (collection === undefined) {
       return null;
@@ -184,12 +184,12 @@ class CollectionThumbnail extends ComponentEx<IProps, { updating: boolean }> {
           {(details !== false) ? (
             <div className={`bottom ${onEdit !== undefined ? 'editable' : ''}`}>
               <CollectionReleaseStatus
-              t={t}
-              active={active}
-              enabled={profile?.modState?.[collection.id]?.enabled ?? false}
-              collection={collection}
-              incomplete={incomplete}
-            />
+                t={t}
+                active={active}
+                enabled={profile?.modState?.[collection.id]?.enabled ?? false}
+                collection={collection}
+                incomplete={incomplete}
+              />
               <div className='collection-revision-and-rating'>
                 <div className='revision-number'>
                   {t('Revision {{number}}{{forceRevision}}', { replace: {
@@ -199,11 +199,11 @@ class CollectionThumbnail extends ComponentEx<IProps, { updating: boolean }> {
                 </div>
                 {(infoCache !== undefined) && validRemote
                   ? <SuccessRating
-                      t={t}
-                      infoCache={infoCache}
-                      collectionSlug={collectionSlug}
-                      revisionNumber={revisionNumber}
-                      revisionId={revisionId}
+                    t={t}
+                    infoCache={infoCache}
+                    collectionSlug={collectionSlug}
+                    revisionNumber={revisionNumber}
+                    revisionId={revisionId}
                   />
                   : null}
               </div>
@@ -218,7 +218,7 @@ class CollectionThumbnail extends ComponentEx<IProps, { updating: boolean }> {
                     onChange={this.changeName}
                   />
                 </div>
-                ) : null}
+              ) : null}
               <div className='details'>
                 <div className='author'>
                   {/*
@@ -229,7 +229,7 @@ class CollectionThumbnail extends ComponentEx<IProps, { updating: boolean }> {
                   */}
                   {t('By {{uploader}}', { replace: {
                     uploader: collection.attributes?.uploader ?? t(AUTHOR_UNKNOWN)},
-                    })}
+                  })}
                 </div>
                 <div><Icon name='mods' />{refMods.length}</div>
                 {/*<div><Icon name='archive' />{util.bytesToString(totalSize)}</div>*/}
@@ -254,7 +254,7 @@ class CollectionThumbnail extends ComponentEx<IProps, { updating: boolean }> {
 
   private get actions() {
     const { t, collection, incomplete, installing, onEdit, onPause, onUpload,
-            onRemove, onResume, onUpdate, onView } = this.props;
+      onRemove, onResume, onUpdate, onView } = this.props;
 
     const result: types.IActionDefinition[] = [];
 

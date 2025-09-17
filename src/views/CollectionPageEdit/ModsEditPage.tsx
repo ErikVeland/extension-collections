@@ -47,7 +47,7 @@ type ProblemType = 'invalid-ids'
                  | 'local-edits-fuzzy-version'
                  | 'local-edits-bundle'
                  | 'replicate-vs-binpatch';
-;
+
 
 interface IProblem {
   type: ProblemType;
@@ -90,7 +90,7 @@ const getCollator = (() => {
 function undefSort(lhs: any, rhs: any) {
   return (lhs !== undefined)
     ? 1 : (rhs !== undefined)
-            ? -1 : 0;
+      ? -1 : 0;
 }
 
 function modNameSort(lhs: types.IMod, rhs: types.IMod,
@@ -397,7 +397,7 @@ class ModsEditPage extends ComponentEx<IProps, IModsPageState> {
         isSortable: true,
         isGroupable: (mod: IModEntry, t: types.TFunction) =>
           util.resolveCategoryName(mod.mod?.attributes?.category,
-            this.context.api.store.getState()) || t('<No category>'),
+                                   this.context.api.store.getState()) || t('<No category>'),
         filter: new OptionsFilter(() => {
           const state: types.IState = this.context.api.getState();
           return Array.from(new Set(Object.values(this.state.entries)
@@ -405,13 +405,13 @@ class ModsEditPage extends ComponentEx<IProps, IModsPageState> {
             .filter(entry => !!entry)
             .map(entry => util.resolveCategoryName(entry, state))
             .sort()))
-          .map(name => {
-            return { value: name, label: name };
-          });
-      }, false, false),
+            .map(name => {
+              return { value: name, label: name };
+            });
+        }, false, false),
         sortFuncRaw: (lhs: IModEntry, rhs: IModEntry, locale: string): number =>
           sortCategories(lhs.mod, rhs.mod, getCollator(locale), this.context.api.store.getState(),
-            this.categorySort()),
+                         this.categorySort()),
       }, {
         id: 'required',
         name: 'Required',
@@ -444,8 +444,8 @@ class ModsEditPage extends ComponentEx<IProps, IModsPageState> {
           const id = entry.mod?.id ?? entry.rule?.reference?.id;
           const { collection } = this.props;
           const type = util.getSafe(collection,
-            ['attributes', 'collection', 'source', id, 'type'],
-            'nexus');
+                                    ['attributes', 'collection', 'source', id, 'type'],
+                                    'nexus');
           return SOURCES[type];
         },
         placement: 'table',
@@ -469,16 +469,16 @@ class ModsEditPage extends ComponentEx<IProps, IModsPageState> {
           const id = entry.mod?.id ?? entry.rule?.reference?.id;
 
           const type = util.getSafe(collection,
-            ['attributes', 'collection', 'source', id, 'type'],
-            'nexus');
+                                    ['attributes', 'collection', 'source', id, 'type'],
+                                    'nexus');
           return SOURCES[type];
         },
         customRenderer: (entry: IModEntry) => {
           const { t, collection } = this.props;
           const id = entry.mod?.id ?? entry.rule?.reference?.id;
           const type = util.getSafe(collection,
-            ['attributes', 'collection', 'source', id, 'type'],
-            'nexus');
+                                    ['attributes', 'collection', 'source', id, 'type'],
+                                    'nexus');
           return (
             <tooltip.IconButton
               icon='edit'
@@ -585,7 +585,7 @@ class ModsEditPage extends ComponentEx<IProps, IModsPageState> {
             (entry.mod?.attributes?.installerChoices?.options ?? []).length > 0;
 
           const installMode = util.getSafe(collection,
-            ['attributes', 'collection', 'installMode', id], 'fresh');
+                                           ['attributes', 'collection', 'installMode', id], 'fresh');
 
           return (
             <InstallModeRenderer
@@ -707,7 +707,7 @@ class ModsEditPage extends ComponentEx<IProps, IModsPageState> {
                     } catch (err) {
                       if (err.code === 'ENOENT') {
                         this.context.api.showErrorNotification('Failed to enable "Local Edits"',
-                          'To enable this feature, the corresponding archive has to exist to '
+                                                               'To enable this feature, the corresponding archive has to exist to '
                           + 'compare against.', { allowReport: false });
                       } else {
                         this.context.api.showErrorNotification(
@@ -1150,7 +1150,7 @@ class ModsEditPage extends ComponentEx<IProps, IModsPageState> {
   private querySource(modId: string, type: SourceType) {
     const { collection } = this.props;
     const src: ICollectionSourceInfo = util.getSafe(collection,
-      ['attributes', 'collection', 'source', modId], { type });
+                                                    ['attributes', 'collection', 'source', modId], { type });
     const input: types.IInput[] = [];
 
     let text: string;
@@ -1185,20 +1185,20 @@ class ModsEditPage extends ComponentEx<IProps, IModsPageState> {
     if ((input.length > 0) || (text !== undefined)) {
       // query details for direct/browse/manual
       this.context.api.showDialog('question',
-        'Provide mod metadata', {
-        text,
-        input,
-        checkboxes: [
-          {
-            id: 'adult',
-            bbcode: 'Mod contains adult content. '
+                                  'Provide mod metadata', {
+                                    text,
+                                    input,
+                                    checkboxes: [
+                                      {
+                                        id: 'adult',
+                                        bbcode: 'Mod contains adult content. '
                   + `([url=${ADULT_CONTENT_URL}]Adult Content Guidelines[/url])`,
-            value: src.adultContent ?? false,
-          },
-        ],
-      }, [
-        { label: 'Save' },
-      ]).then((result => {
+                                        value: src.adultContent ?? false,
+                                      },
+                                    ],
+                                  }, [
+                                    { label: 'Save' },
+                                  ]).then((result => {
         this.props.onSetCollectionAttribute(['source', modId], {
           type,
           url: result.input.url,
@@ -1231,11 +1231,11 @@ class ModsEditPage extends ComponentEx<IProps, IModsPageState> {
       { label: 'Cancel' },
       { label: 'Save' },
     ], 'collection-set-instructions')
-    .then(result => {
-      if (result.action === 'Save') {
-        onSetCollectionAttribute(['instructions', modId], result.input['instructions']);
-      }
-    });
+      .then(result => {
+        if (result.action === 'Save') {
+          onSetCollectionAttribute(['instructions', modId], result.input['instructions']);
+        }
+      });
   }
 
   private onQuerySource = (evt: React.MouseEvent<any>) => {

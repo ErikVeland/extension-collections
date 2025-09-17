@@ -110,21 +110,21 @@ async function collectionUpdate(api: types.IExtensionApi, downloadGameId: string
       const collectionName = collection?.name ?? util.renderModName(oldMod);
       const result: types.IDialogResult = await api.showDialog(
         'question', 'Remove mods from old revision?', {
-        text: 'There are {{count}} mods installed that are not present in the latest '
+          text: 'There are {{count}} mods installed that are not present in the latest '
             + 'revision of "{{collectionName}}". It is recommended that you remove the '
             + 'unused mods to avoid compatibility issues going forward. '
             + 'If you choose to keep the mods installed they will no longer be associated '
             + 'with this Collection and will be managed as if they have been installed '
             + 'individually. Would you like to remove the old mods now?',
-        parameters: {
-          count: obsolete.length,
-          collectionName,
-        },
-      }, [
-        { label: 'Keep All' },
-        { label: 'Review Mods' },
-        { label: 'Remove All' },
-      ]);
+          parameters: {
+            count: obsolete.length,
+            collectionName,
+          },
+        }, [
+          { label: 'Keep All' },
+          { label: 'Review Mods' },
+          { label: 'Remove All' },
+        ]);
 
       if (result.action === 'Keep All') {
         ops.keep = obsolete.map(mod => mod.id);
@@ -165,8 +165,8 @@ async function collectionUpdate(api: types.IExtensionApi, downloadGameId: string
       actions.setModAttribute(gameMode, modId, 'installedAsDependency', false)));
 
     await util.toPromise(cb => api.events.emit('remove-mods', gameMode,
-      [oldModId, ...ops.remove],
-      cb, { incomplete: true, ignoreInstalling: true }));
+                                               [oldModId, ...ops.remove],
+                                               cb, { incomplete: true, ignoreInstalling: true }));
   } catch (err) {
     if (!(err instanceof util.UserCanceled)) {
       api.showErrorNotification('Failed to download collection', err, {

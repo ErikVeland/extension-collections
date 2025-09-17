@@ -76,7 +76,7 @@ function HealthIndicator(props: IHealthIndicatorProps) {
       <div className='collection-health-header'>        
         <div className='collection-health-header-title'>
           <Icon name='revision' />
-        {t('Revision {{number}}', { replace: { number: revisionNumber } })}
+          {t('Revision {{number}}', { replace: { number: revisionNumber } })}
         </div>
         <div className='collection-health-header-gameversion'>{t('Game Version: ')}
           <span className={gameVersionClassName}>{collectionGameVersion}</span>  
@@ -87,7 +87,7 @@ function HealthIndicator(props: IHealthIndicatorProps) {
               + 'Collection version: {{collectionGameVersion}}', { replace: { collectionGameVersion: collectionGameVersion, gameVersion: gameVersion } })}
             </More>
           ) : null}         
-          </div>
+        </div>
       </div>
       <FlexLayout type='row' className='collection-health-body'>
         <FlexLayout.Fixed className='collection-revition-rating-parent'>
@@ -109,57 +109,57 @@ function HealthIndicator(props: IHealthIndicatorProps) {
         <FlexLayout.Flex>
           <FlexLayout type='column'>
             {(!voteAllowed) ? (
-            <FlexLayout.Fixed className='collection-health-rating-text'>
-              {t('Collection Success Rating')}
-            </FlexLayout.Fixed>
+              <FlexLayout.Fixed className='collection-health-rating-text'>
+                {t('Collection Success Rating')}
+              </FlexLayout.Fixed>
             ) : (
-            <>
-            <FlexLayout.Fixed className='collection-health-rating-text'>
-              {t('Did this collection work successfully?')}
-            </FlexLayout.Fixed>
-            <FlexLayout.Fixed>
-              <FlexLayout type='row' className='collection-voting-pill'>
+              <>
+                <FlexLayout.Fixed className='collection-health-rating-text'>
+                  {t('Did this collection work successfully?')}
+                </FlexLayout.Fixed>
                 <FlexLayout.Fixed>
-                  <tooltip.Button
-                    className={
-                      'collection-ghost-button ' +
+                  <FlexLayout type='row' className='collection-voting-pill'>
+                    <FlexLayout.Fixed>
+                      <tooltip.Button
+                        className={
+                          'collection-ghost-button ' +
                       (ownSuccess === 'positive' ? 'voted' : '')
-                    }
-                    tooltip={
-                      voteAllowed
-                        ? t('Collection worked (mostly)')
-                        : t(
-                            'You must wait for 12 hours between downloading a collection revision and rating it',
-                          )
-                    }
-                    data-success={true}
-                    onClick={voteSuccess}
-                    disabled={!voteAllowed}
-                  >
-                    {t('Yes')}
-                  </tooltip.Button>
-                </FlexLayout.Fixed>
-                <FlexLayout.Fixed>
-                  <tooltip.Button
-                    className={
-                      'collection-ghost-button ' +
+                        }
+                        tooltip={
+                          voteAllowed
+                            ? t('Collection worked (mostly)')
+                            : t(
+                              'You must wait for 12 hours between downloading a collection revision and rating it',
+                            )
+                        }
+                        data-success={true}
+                        onClick={voteSuccess}
+                        disabled={!voteAllowed}
+                      >
+                        {t('Yes')}
+                      </tooltip.Button>
+                    </FlexLayout.Fixed>
+                    <FlexLayout.Fixed>
+                      <tooltip.Button
+                        className={
+                          'collection-ghost-button ' +
                       (ownSuccess === 'negative' ? 'voted' : '')
-                    }
-                    tooltip={
-                      voteAllowed
-                        ? t("Collection didn't work (in a significant way)")
-                        : t('You must wait for 12 hours between downloading a collection revision and rating it')
-                    }
-                    data-success={false}
-                    onClick={voteSuccess}
-                    disabled={!voteAllowed}
-                  >
-                    {t('No')}
-                  </tooltip.Button>
+                        }
+                        tooltip={
+                          voteAllowed
+                            ? t("Collection didn't work (in a significant way)")
+                            : t('You must wait for 12 hours between downloading a collection revision and rating it')
+                        }
+                        data-success={false}
+                        onClick={voteSuccess}
+                        disabled={!voteAllowed}
+                      >
+                        {t('No')}
+                      </tooltip.Button>
+                    </FlexLayout.Fixed>
+                  </FlexLayout>
                 </FlexLayout.Fixed>
-              </FlexLayout>
-            </FlexLayout.Fixed>
-            </>)}
+              </>)}
           </FlexLayout>
         </FlexLayout.Flex>
       </FlexLayout>

@@ -35,16 +35,16 @@ const settings = (props: IInstructionProps) => {
       <h4>{t('Options')}</h4>
       <p>{t('The below settings can optionally be changed to customize this collection')}</p>
 
-        <Toggle
-          id={'settings-recommend-new-profile'}
-          onToggle={toggleRecommendNewProfile}
-          checked={recommendNewProfile}
-        >
-          {t('Recommend new profile')}
-          <More id='collection-settings-recommendnewprofile' name={t('Recommend new profile')} >
-              {t('If enabled, Vortex will recommend creating a new profile when installing this collection. If disabled, the collection will be installed into the currently active profile.')}
-          </More>
-        </Toggle>
+      <Toggle
+        id={'settings-recommend-new-profile'}
+        onToggle={toggleRecommendNewProfile}
+        checked={recommendNewProfile}
+      >
+        {t('Recommend new profile')}
+        <More id='collection-settings-recommendnewprofile' name={t('Recommend new profile')} >
+          {t('If enabled, Vortex will recommend creating a new profile when installing this collection. If disabled, the collection will be installed into the currently active profile.')}
+        </More>
+      </Toggle>
     </FlexLayout>
   );
 }

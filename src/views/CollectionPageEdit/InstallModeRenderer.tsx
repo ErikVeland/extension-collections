@@ -79,4 +79,4 @@ function mapStateToProps(state: types.IState): IConnectedProps {
 }
 
 export default withTranslation([NAMESPACE, 'common'])(connect(mapStateToProps)(
-    InstallModeRenderer) as any) as React.ComponentClass<IBaseProps>;
+  InstallModeRenderer) as any) as React.ComponentClass<IBaseProps>;

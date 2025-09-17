@@ -110,7 +110,7 @@ function AddModsDialog(props: IAddModsDialogProps) {
     }
   }, [selection, setSelection, collectionId]);
   const columns = React.useMemo(() => makeColumns(changeSelection),
-    [selection, setSelection, collectionId]);
+                                [selection, setSelection, collectionId]);
 
   const addSelection = React.useCallback(() => {
     onAddSelection(collectionId, Array.from(selection));

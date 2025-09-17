@@ -41,79 +41,79 @@ export async function scanForDiffs(api: types.IExtensionApi, gameId: string,
 
   return queue(() => new Promise<{ [filePath: string]: string }>((resolve, reject) => {
     api.events.emit('simulate-installer', gameId, mod.archiveId, { choices },
-      async (instRes: types.IInstallResult, tempPath: string) => {
-      try {
-        const dlPath = selectors.downloadPathForGame(state, archive.game[0]);
-        const archivePath = path.join(dlPath, archive.localPath);
+                    async (instRes: types.IInstallResult, tempPath: string) => {
+                      try {
+                        const dlPath = selectors.downloadPathForGame(state, archive.game[0]);
+                        const archivePath = path.join(dlPath, archive.localPath);
 
-        const sourceChecksums: { [fileName: string]: string } = {};
-        const szip = new util.SevenZip();
-        await szip.list(archivePath, undefined, async entries => {
-            for (const entry of entries) {
-              if (entry.attr !== 'D') {
-                try {
-                  sourceChecksums[entry.name] = entry['crc'].toUpperCase();
-                } catch (err) {
-                  api.showErrorNotification('Failed to determine checksum for file', err, {
-                    message: entry.name,
-                  });
-                }
-              }
-            }
-          });
+                        const sourceChecksums: { [fileName: string]: string } = {};
+                        const szip = new util.SevenZip();
+                        await szip.list(archivePath, undefined, async entries => {
+                          for (const entry of entries) {
+                            if (entry.attr !== 'D') {
+                              try {
+                                sourceChecksums[entry.name] = entry['crc'].toUpperCase();
+                              } catch (err) {
+                                api.showErrorNotification('Failed to determine checksum for file', err, {
+                                  message: entry.name,
+                                });
+                              }
+                            }
+                          }
+                        });
 
-        const result: { [filePath: string]: string } = {};
+                        const result: { [filePath: string]: string } = {};
 
-        for (const file of instRes.instructions.filter(instr => instr.type === 'copy')) {
-          const srcCRC = sourceChecksums[file.source];
-          const dstFilePath = path.join(localPath, file.destination);
-          const dat = await fs.readFileAsync(dstFilePath);
-          const dstCRC = crcFromBuf(dat);
-          if (srcCRC !== dstCRC) {
-            onProgress(undefined, api.translate('Creating patch for {{fileName}}', { replace: {
-              fileName: path.basename(file.source),
-            } }));
-            log('debug', 'found modified file', { filePath: file.source, srcCRC, dstCRC });
-            const srcFilePath = path.join(tempPath, file.source);
-            const patchPath = path.join(destPath, file.destination + '.diff');
-            await fs.ensureDirWritableAsync(path.dirname(patchPath));
-            await bsdiff.diff(srcFilePath, dstFilePath, patchPath, progress => {
+                        for (const file of instRes.instructions.filter(instr => instr.type === 'copy')) {
+                          const srcCRC = sourceChecksums[file.source];
+                          const dstFilePath = path.join(localPath, file.destination);
+                          const dat = await fs.readFileAsync(dstFilePath);
+                          const dstCRC = crcFromBuf(dat);
+                          if (srcCRC !== dstCRC) {
+                            onProgress(undefined, api.translate('Creating patch for {{fileName}}', { replace: {
+                              fileName: path.basename(file.source),
+                            } }));
+                            log('debug', 'found modified file', { filePath: file.source, srcCRC, dstCRC });
+                            const srcFilePath = path.join(tempPath, file.source);
+                            const patchPath = path.join(destPath, file.destination + '.diff');
+                            await fs.ensureDirWritableAsync(path.dirname(patchPath));
+                            await bsdiff.diff(srcFilePath, dstFilePath, patchPath, progress => {
               // nop - currently not showing progress
-            });
-            try {
-              await validatePatch(srcFilePath, patchPath);
-              result[file.destination] = srcCRC;
-            } catch (err) {
-              await fs.removeAsync(patchPath);
+                            });
+                            try {
+                              await validatePatch(srcFilePath, patchPath);
+                              result[file.destination] = srcCRC;
+                            } catch (err) {
+                              await fs.removeAsync(patchPath);
 
-              const res: types.IDialogResult = await api.showDialog('error',
-                'Can\'t save local edits', {
-                text: 'The local modifications to file "{{fileName}}" can not be included in '
+                              const res: types.IDialogResult = await api.showDialog('error',
+                                                                                    'Can\'t save local edits', {
+                                                                                      text: 'The local modifications to file "{{fileName}}" can not be included in '
                     + 'the collection.\n'
                     + 'We don\'t allow edits that exceed a certain percentage '
                     + 'of the original file size.\n'
                     + 'If you continue anyway this file will be installed unmodified for users.',
-                parameters: {
-                  fileName: file.source,
-                },
-              }, [
-                { label: 'Cancel' },
-                { label: 'Continue' },
-              ]);
+                                                                                      parameters: {
+                                                                                        fileName: file.source,
+                                                                                      },
+                                                                                    }, [
+                                                                                      { label: 'Cancel' },
+                                                                                      { label: 'Continue' },
+                                                                                    ]);
 
-              if (res.action === 'Cancel') {
-                err['mayIgnore'] = false;
-                throw err;
-              }
-            }
-            log('debug', 'patch created at', patchPath);
-          }
-        }
-        resolve(result);
-      } catch (err) {
-        reject(err);
-      }
-    });
+                              if (res.action === 'Cancel') {
+                                err['mayIgnore'] = false;
+                                throw err;
+                              }
+                            }
+                            log('debug', 'patch created at', patchPath);
+                          }
+                        }
+                        resolve(result);
+                      } catch (err) {
+                        reject(err);
+                      }
+                    });
   }), false);
 }
 

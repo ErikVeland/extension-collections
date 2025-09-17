@@ -41,7 +41,7 @@ export function genDefaultsAction(api: types.IExtensionApi,
   const collection = util.getSafe(state, ['persistent', 'mods', gameId, collectionId], undefined);
   if (collection === undefined) {
     const error = new util.ProcessCanceled('Unable to find collection mod',
-      { collectionId: collection.id });
+                                           { collectionId: collection.id });
     api.showErrorNotification('Failed to ascertain default install mode', error);
     return undefined;
   }
