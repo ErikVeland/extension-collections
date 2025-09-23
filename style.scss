@@ -643,7 +643,7 @@ ul.collection-mods-page-attrib-tooltip {
   .revision-number {
     background-color: $brand-bg;
     padding: 2px 12px;
-    border-radius: 20px;
+    border-radius: 8px;
     width: fit-content;
     text-transform: uppercase;
     font-size: smaller;
@@ -715,7 +715,7 @@ ul.collection-mods-page-attrib-tooltip {
   background-color: $gray-light;
 
   padding: 2px 12px;
-  border-radius: 20px;
+  border-radius: 8px;
   width: fit-content;
   text-transform: uppercase;
   font-size: smaller;
@@ -1638,7 +1638,7 @@ ul.collection-mods-page-attrib-tooltip {
 
   padding: 4px 8px 4px 6px;
   box-shadow: 0px 2px 6px 1px rgba(0, 0, 0, 0.5);
-  border-radius: 20px;
+  border-radius: 8px;
   font-size: smaller;
 
   .icon {
@@ -1732,7 +1732,7 @@ ul.collection-mods-page-attrib-tooltip {
 }
 
 .collections-you-curated-tag {
-  border-radius: 20px;
+  border-radius: 8px;
   background-color: $white;
   color: $black;
   text-transform: uppercase;
