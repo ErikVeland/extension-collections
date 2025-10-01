@@ -1277,10 +1277,25 @@ function once(api: types.IExtensionApi, collectionsCB: () => ICallbackMap) {
       });
 
   api.events.on('gamemode-activated', updateOwnCollectionsCB);
+
   api.onStateChange(['persistent', 'nexus', 'userInfo'], (prev, cur) => {
     const gameMode = selectors.activeGameId(api.getState());
-    updateOwnCollectionsCB(gameMode);
+    updateOwnCollectionsCB(gameMode)
+    if (prev?.isPremium !== cur?.isPremium) {
+      restartDebouncer.schedule();
+    }
   });
+
+  const restartDebouncer = new util.Debouncer(async () => {
+    if ((driver?.collection !== undefined)) {
+      // user info changed, so we need to update the collection info
+      await api.emitAndAwait('reset-dependency-installs');
+      const profile = selectors.activeProfile(api.getState());
+      await driver.start(profile, driver.collection);
+    }
+    return Promise.resolve();
+  }, 2000, true, false);
+  
 
   driver.infoCache.clearCache();
 }

@@ -49,11 +49,11 @@ class CollectionBanner extends ComponentEx<ICollectionBannerProps, {}> {
   private goGetPremium = () => {
     this.context.api.events.emit('analytics-track-click-event', 'Go Premium', 'Collections Added Collection');
     util.opn(util.nexusModsURL(PREMIUM_PATH,
-                               {
-                                 section: util.Section.Users,
-                                 campaign: util.Campaign.BuyPremium,
-                                 source: util.Source.CollectionsAd
-                               }))
+      {
+        section: util.Section.Users,
+        campaign: util.Campaign.BuyPremium,
+        content: util.Content.CollectionsDownloadAd
+      }))
       .catch(err => undefined);
   }
 }

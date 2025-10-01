@@ -3,7 +3,7 @@ import CollectionThumbnail from '../CollectionTile';
 import React = require('react');
 import { Button, Media, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import ReactMarkdown from 'react-markdown';
+import * as ReactMarkdown from 'react-markdown';
 import { FlexLayout, MainContext, tooltip, types, util } from 'vortex-api';
 
 import { IRevision } from '@nexusmods/nexus-api';
@@ -34,9 +34,9 @@ function InstallChangelogDialogImpl(props: IInstallChangelogDialogProps) {
     context.api.events.emit('analytics-track-click-event', 'Collections', 'View on site Updated Collection');
     util.opn(util.nexusModsURL(
       [revisionInfo.collection.game.domainName, 'collections', revisionInfo.collection.slug], {
-        campaign: util.Campaign.ViewCollection,
-        section: util.Section.Collections,
-      }));
+      campaign: util.Campaign.GeneralNavigation,
+      section: util.Section.Collections,
+    }));
   }, [collection]);
 
   if (collection === undefined) {
@@ -55,7 +55,7 @@ function InstallChangelogDialogImpl(props: IInstallChangelogDialogProps) {
       <Modal.Header>
         <Modal.Title>
           {t('{{collectionName}} update',
-             { replace: { collectionName: util.renderModName(collection) } })}
+            { replace: { collectionName: util.renderModName(collection) } })}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -72,7 +72,7 @@ function InstallChangelogDialogImpl(props: IInstallChangelogDialogProps) {
         <Media.Right>
           <FlexLayout type='row'>
             <h4>{t('Revision {{revNum}} Changelog',
-                   { replace: { revNum: revisionInfo.revisionNumber } })}</h4>
+                  { replace: { revNum: revisionInfo.revisionNumber } })}</h4>
             <div className='changelog-time'>{changelogDate.toLocaleDateString(lang)}</div>
           </FlexLayout>
           <div className='changelog-scroll'>
