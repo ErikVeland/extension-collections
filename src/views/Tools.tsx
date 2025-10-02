@@ -1,4 +1,4 @@
-import I18next from 'i18next';
+import type { TFunction } from 'i18next';
 import * as path from 'path';
 import * as React from 'react';
 import { ControlLabel, Image, Table } from 'react-bootstrap';
@@ -28,7 +28,7 @@ function ToolIcon(props: { gameId: string, imageUrl: string }) {
 }
 
 interface IToolItemProps {
-  t: I18next.TFunction;
+  t: TFunction;
   gameId: string;
   tool: types.IDiscoveredTool;
   enabled: boolean;
@@ -52,7 +52,7 @@ function ToolItem(props: IToolItemProps) {
 }
 
 interface IToolsProps {
-  t: I18next.TFunction;
+  t: TFunction;
   collection: types.IMod;
   onSetCollectionAttribute: (attrPath: string[], value: any) => void;
 }

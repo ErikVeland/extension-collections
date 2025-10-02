@@ -11,7 +11,7 @@ import CollectionPage from '../CollectionPageView';
 import StartPage from './StartPage';
 
 import { IRating, IRevision } from '@nexusmods/nexus-api';
-import I18next from 'i18next';
+import type { TFunction } from 'i18next';
 import * as React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
@@ -52,7 +52,7 @@ interface IActionProps {
 }
 
 export type ICollectionsMainPageProps =
-  ICollectionsMainPageBaseProps & IConnectedProps & IActionProps & { t: I18next.TFunction };
+  ICollectionsMainPageBaseProps & IConnectedProps & IActionProps & { t: TFunction };
 
 interface IComponentState {
   selectedCollection: string;

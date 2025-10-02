@@ -10,6 +10,7 @@ import {
   IRevision, RatingOptions,
 } from '@nexusmods/nexus-api';
 import i18next from 'i18next';
+import type { TFunction } from 'i18next';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { Media, Panel } from 'react-bootstrap';
@@ -129,7 +130,7 @@ async function refreshCollection(api: types.IExtensionApi, collection: ICollecti
 }
 
 interface ICollectionOverviewProps {
-  t: i18next.TFunction;
+  t: TFunction;
   language: string;
   profile: types.IProfile;
   collection: types.IMod;

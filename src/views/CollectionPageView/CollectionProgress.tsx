@@ -3,13 +3,14 @@ import { IModEx } from '../../types/IModEx';
 import CollectionBanner from './CollectionBanner';
 
 import i18next from 'i18next';
+import type { TFunction } from 'i18next';
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import { ComponentEx, FlexLayout, ProgressBar, Spinner, tooltip, types, util } from 'vortex-api';
 import { calculateCollectionSize, isRelevant } from '../../util/util';
 
 export interface ICollectionProgressProps {
-  t: i18next.TFunction;
+  t: TFunction;
   isPremium: boolean;
   mods: { [modId: string]: IModEx };
   downloads: { [dlId: string]: types.IDownload };
