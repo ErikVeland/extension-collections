@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as nexusApi from '@nexusmods/nexus-api';
-import * as Bluebird from 'bluebird';
+import Bluebird from 'bluebird';
 const Promise = Bluebird;
 import * as path from 'path';
 import { actions, log, selectors, types, util, } from 'vortex-api';
@@ -38,7 +38,7 @@ class InstallDriver {
   private mTotalSize: number;
   private mOnStop: () => void;
   // Use Bluebird internally to match existing code in this extension
-  private mPrepare: Bluebird<void> = Promise.resolve();
+  private mPrepare: Bluebird<void> = Bluebird.resolve();
   private mTimeStarted: number;
   private get requiredMods() {
     return this.mDependentMods.filter(m => m.type === 'requires');
@@ -71,7 +71,7 @@ class InstallDriver {
       if (download !== undefined) {
         this.mInstallingMod = download.localPath;
       }
-      return Promise.resolve();
+      return Bluebird.resolve();
     });
 
     api.events.on('did-install-mod', (gameId: string, archiveId: string, modId: string) => {
@@ -152,7 +152,7 @@ class InstallDriver {
 
   public async query(profile: types.IProfile, collection: types.IMod) {
     await this.mPrepare;
-    this.mPrepare = Promise.resolve();
+    this.mPrepare = Bluebird.resolve();
 
     if (collection?.archiveId === undefined) {
       return;
@@ -175,7 +175,7 @@ class InstallDriver {
 
   public async start(profile: types.IProfile, collection: types.IMod) {
     await this.mPrepare;
-    this.mPrepare = Promise.resolve();
+    this.mPrepare = Bluebird.resolve();
 
     if (collection?.archiveId === undefined) {
       return;
@@ -502,7 +502,7 @@ class InstallDriver {
     // suppress plugins-changed event to avoid constantly running expensive callbacks
     // until onStop gets called
     this.mApi.ext.withSuppressedTests?.(['plugins-changed', 'settings-changed', 'mod-activated', 'mod-installed'], () =>
-      new Promise(resolve => {
+      new Bluebird(resolve => {
         this.mOnStop = () => {
           resolve(undefined);
           this.mOnStop = undefined;

@@ -32,7 +32,7 @@ import initIniTweaks from './initweaks';
 import initTools from './tools';
 
 import * as nexusApi from '@nexusmods/nexus-api';
-import * as PromiseBB from 'bluebird';
+import PromiseBB from 'bluebird';
 import * as _ from 'lodash';
 import memoize from 'memoize-one';
 import * as path from 'path';
@@ -798,28 +798,36 @@ function register(context: types.IExtensionContext,
     }, (profileIds: string[]) => profileCollectionExists(context.api, profileIds[0]));
 
   context.registerAction('mods-action-icons', 300, 'collection', {}, 'Add to Collection...',
-    (instanceIds: string[]) => addCollectionAction(context.api, instanceIds)
+    (instanceIds: string[]) => {
+      addCollectionAction(context.api, instanceIds)
         .then(() => collectionChanged.schedule())
-        .catch(err => context.api.showErrorNotification('failed to add mod to collection', err)),
+        .catch(err => context.api.showErrorNotification('failed to add mod to collection', err));
+    },
     (instanceIds: string[]) => addCollectionCondition(context.api, instanceIds));
 
   context.registerAction('mods-multirow-actions', 300, 'collection', {}, 'Add to Collection...',
-    (instanceIds: string[]) => addCollectionAction(context.api, instanceIds)
+    (instanceIds: string[]) => {
+      addCollectionAction(context.api, instanceIds)
         .then(() => collectionChanged.schedule())
-        .catch(err => context.api.showErrorNotification('failed to add mod to collection', err)),
+        .catch(err => context.api.showErrorNotification('failed to add mod to collection', err));
+    },
     (instanceIds: string[]) => addCollectionCondition(context.api, instanceIds));
 
   context.registerAction('mods-action-icons', 300, 'collection', {}, 'Remove from Collection...',
-    (instanceIds: string[]) => removeCollectionAction(context.api, instanceIds)
+    (instanceIds: string[]) => {
+      removeCollectionAction(context.api, instanceIds)
         .then(() => collectionChanged.schedule())
-        .catch(err => context.api.showErrorNotification('failed to remove mod from collection', err)),
+        .catch(err => context.api.showErrorNotification('failed to remove mod from collection', err));
+    },
     (instanceIds: string[]) => removeCollectionCondition(context.api, instanceIds));
 
   context.registerAction('mods-multirow-actions', 300, 'collection', {},
                          'Remove from Collection...',
-    (instanceIds: string[]) => removeCollectionAction(context.api, instanceIds)
+    (instanceIds: string[]) => {
+      removeCollectionAction(context.api, instanceIds)
         .then(() => collectionChanged.schedule())
-        .catch(err => context.api.showErrorNotification('failed to remove mod from collection', err)),
+        .catch(err => context.api.showErrorNotification('failed to remove mod from collection', err));
+    },
     (instanceIds: string[]) => removeCollectionCondition(context.api, instanceIds));
 
   context.registerAttributeExtractor(100, genAttributeExtractor(context.api));

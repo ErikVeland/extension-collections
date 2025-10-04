@@ -2,6 +2,7 @@ import * as bsdiffT from 'bsdiff-node';
 import * as crc32 from 'crc-32';
 import * as path from 'path';
 import { fs, log, selectors, types, util } from 'vortex-api';
+import Bluebird from 'bluebird';
 import { MAX_PATCH_SIZE, PATCHES_PATH, PATCH_OVERHEAD } from '../constants';
 
 const bsdiff = util.lazyRequire<typeof bsdiffT>(() => require('bsdiff-node'));
@@ -19,12 +20,12 @@ async function validatePatch(srcFilePath: string, patchFilePath: string) {
   }
 }
 
-const queue = util.makeQueue();
+const queue = util.makeQueue<{ [filePath: string]: string }>();
 
-export async function scanForDiffs(api: types.IExtensionApi, gameId: string,
+export function scanForDiffs(api: types.IExtensionApi, gameId: string,
                                    modId: string, destPath: string,
                                    onProgress: (percent: number, text: string) => void)
-                                   : Promise<{ [filePath: string]: string }> {
+                                   : Bluebird<{ [filePath: string]: string }> {
   const state = api.getState();
   const mod = state.persistent.mods[gameId][modId];
 
@@ -39,16 +40,16 @@ export async function scanForDiffs(api: types.IExtensionApi, gameId: string,
 
   const choices = mod.attributes?.installerChoices;
 
-  return queue(() => new Promise<{ [filePath: string]: string }>((resolve, reject) => {
+  return queue(() => new Bluebird<{ [filePath: string]: string }>((resolve, reject) => {
     api.events.emit('simulate-installer', gameId, mod.archiveId, { choices },
       async (instRes: types.IInstallResult, tempPath: string) => {
-      try {
+        try {
         const rawGame = Array.isArray(archive.game) ? archive.game[0] : archive.game;
         const internalId = rawGame ? (util.convertGameIdReverse(selectors.knownGames(state), rawGame) || rawGame) : rawGame;
         const dlPath = selectors.downloadPathForGame(state, internalId);
         const archivePath = path.join(dlPath, archive.localPath);
 
-                        const sourceChecksums: { [fileName: string]: string } = {};
+                        const sourceChecksums: Record<string, string> = Object.create(null);
                         const szip = new util.SevenZip();
                         await szip.list(archivePath, undefined, async entries => {
                           for (const entry of entries) {
@@ -64,7 +65,7 @@ export async function scanForDiffs(api: types.IExtensionApi, gameId: string,
                           }
                         });
 
-                        const result: { [filePath: string]: string } = {};
+                        const result: { [filePath: string]: string } = Object.create(null);
 
                         for (const file of instRes.instructions.filter(instr => instr.type === 'copy')) {
                           const srcCRC = sourceChecksums[file.source];
@@ -84,7 +85,7 @@ export async function scanForDiffs(api: types.IExtensionApi, gameId: string,
                             });
                             try {
                               await validatePatch(srcFilePath, patchPath);
-                              result[file.destination] = srcCRC;
+                              (result as any)[file.destination] = srcCRC;
                             } catch (err) {
                               await fs.removeAsync(patchPath);
 
@@ -111,11 +112,11 @@ export async function scanForDiffs(api: types.IExtensionApi, gameId: string,
                             log('debug', 'patch created at', patchPath);
                           }
                         }
-                        resolve(result);
-                      } catch (err) {
-                        reject(err);
-                      }
-                    });
+                        resolve(result as { [filePath: string]: string });
+        } catch (err) {
+          reject(err);
+        }
+      });
   }), false);
 }
 

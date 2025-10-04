@@ -13,6 +13,7 @@ import StartPage from './StartPage';
 import { IRating, IRevision } from '@nexusmods/nexus-api';
 import I18next from 'i18next';
 import * as React from 'react';
+import Bluebird from 'bluebird';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as Redux from 'redux';
@@ -89,7 +90,7 @@ class CollectionsMainPage extends ComponentEx<ICollectionsMainPageProps, ICompon
 
     this.mMatchRefDebouncer = new util.Debouncer(() => {
       this.nextState.matchedReferences = this.updateMatchedReferences(this.props);
-      return Promise.resolve();
+      return Bluebird.resolve();
     }, 2000);
   }
 
@@ -471,12 +472,13 @@ class CollectionsMainPage extends ComponentEx<ICollectionsMainPageProps, ICompon
       return prev;
     }, { requires: [], recommends: [] });
 
-    const eaa = (ruleList, recommended) => {
+    const eaa = (ruleList: types.IModRule[], recommended: boolean): Bluebird<void> => {
       if (ruleList.length === 0) {
-        return Promise.resolve();
-      } else {
-        return api.emitAndAwait('install-from-dependencies', collectionId, ruleList, recommended);
+        return Bluebird.resolve();
       }
+      return Bluebird.resolve(
+        api.emitAndAwait('install-from-dependencies', collectionId, ruleList, recommended)
+      ) as Bluebird<void>;
     };
 
     eaa(ruleGroups.requires, false)

@@ -1,5 +1,5 @@
 import { ICollection, IDownloadURL, IRevision } from '@nexusmods/nexus-api';
-import * as Bluebird from 'bluebird';
+import Bluebird from 'bluebird';
 import { actions, selectors, types, util } from 'vortex-api';
 import InstallDriver from './util/InstallDriver';
 import showChangelog from './views/InstallDialog/InstallChangelogDialog';
@@ -70,13 +70,14 @@ async function collectionUpdate(api: types.IExtensionApi, downloadGameId: string
     const oldRules = oldMod?.rules ?? [];
 
     const newModId = await util.toPromise(cb =>
-      api.events.emit('start-install-download', dlId, undefined, cb));
+      api.events.emit('start-install-download', dlId, undefined, cb)) as string;
+    const newModIdStr = String(newModId);
 
     // remove old revision and mods installed for the old revision that are no longer required
 
-    const mods = api.getState().persistent.mods[gameMode];
+    const mods = api.getState().persistent.mods[gameMode] as Record<string, types.IMod>;
 
-    if (mods[newModId] === undefined) {
+    if (mods[newModIdStr] === undefined) {
       throw new util.ProcessCanceled('Download failed, update archive not found');
     }
 
@@ -99,7 +100,7 @@ async function collectionUpdate(api: types.IExtensionApi, downloadGameId: string
     const obsolete = candidates
       // see if there is a mod outside candidates that requires it but before anything we
       // check the new version of the collection because that's the most likely to require it
-      .filter(mod => !references(mods[newModId].rules, mod))
+      .filter(mod => !references(mods[newModIdStr].rules, mod))
       .filter(mod => notCandidates
         // that depends upon the candidate,
         .find(other => references(other.rules, mod)) === undefined);
@@ -148,8 +149,9 @@ async function collectionUpdate(api: types.IExtensionApi, downloadGameId: string
         if (reviewResult.action === 'Keep All') {
           ops.keep = obsolete.map(mod => mod.id);
         } else {
-          ops = Object.keys(reviewResult.input).reduce((prev, value) => {
-            if (reviewResult.input[value]) {
+          const reviewInput = reviewResult.input as Record<string, boolean>;
+          ops = Object.keys(reviewInput).reduce((prev, value) => {
+            if (reviewInput[value]) {
               prev.remove.push(value);
             } else {
               prev.keep.push(value);

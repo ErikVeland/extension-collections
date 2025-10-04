@@ -1,5 +1,5 @@
 /* eslint-disable */
-import * as PromiseBB from 'bluebird';
+import PromiseBB from 'bluebird';
 import { createHash } from 'crypto';
 import { selectors, types, util } from 'vortex-api';
 import { doExportToAPI } from '../collectionExport'; 

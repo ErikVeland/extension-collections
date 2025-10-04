@@ -46,8 +46,9 @@ export async function matchChecksums(api: types.IExtensionApi,
   });
 
   let entries: string[] = [];
-  await util.walk(localPath, async input => {
-    entries = [].concat(entries, input);
+  await util.walk(localPath, (iterPath, stats) => {
+    entries = [].concat(entries, iterPath);
+    return undefined as any;
   }, {});
 
   const localChecksums: Set<string> = new Set();

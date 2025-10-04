@@ -4,7 +4,7 @@ import { modToCollection as modToCollection } from './util/transformCollection';
 import { makeProgressFunction } from './util/util';
 
 import { ICreateCollectionResult, IGraphErrorDetail } from '@nexusmods/nexus-api';
-import * as PromiseBB from 'bluebird';
+import PromiseBB from 'bluebird';
 import * as _ from 'lodash';
 import Zip = require('node-7z');
 import * as path from 'path';
