@@ -23,15 +23,26 @@ describe('bsdiff-node', () => {
   });
 
   it('creates and applies a binary patch', async () => {
-    await new Promise((resolve, reject) => {
-      bsdiff.diff(fileA, fileB, patchFile, () => {});
-      setTimeout(resolve, 500); // Wait for file to be written
+    await new Promise<void>((resolve, reject) => {
+      try {
+        bsdiff.diff(fileA, fileB, patchFile, (err) => {
+          if (err) return reject(err);
+          resolve();
+        });
+      } catch (e) {
+        reject(e);
+      }
     });
     expect(fs.existsSync(patchFile)).toBe(true);
-
-    await new Promise((resolve, reject) => {
-      bsdiff.patch(fileA, patchedFile, patchFile, () => {});
-      setTimeout(resolve, 500); // Wait for file to be written
+    await new Promise<void>((resolve, reject) => {
+      try {
+        bsdiff.patch(fileA, patchedFile, patchFile, (err) => {
+          if (err) return reject(err);
+          resolve();
+        });
+      } catch (e) {
+        reject(e);
+      }
     });
     const orig = fs.readFileSync(fileB);
     const patched = fs.readFileSync(patchedFile);
