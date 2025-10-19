@@ -1,5 +1,5 @@
 /* eslint-disable */
-import PromiseBB from 'bluebird';
+// TODO: Remove Bluebird import - using native Promise;
 import { createHash } from 'crypto';
 import { selectors, types, util } from 'vortex-api';
 import { doExportToAPI } from '../collectionExport'; 
@@ -68,8 +68,8 @@ export function makeProgressFunction(api: types.IExtensionApi) {
   return { progress, progressEnd };
 }
 
-export function bbProm<T>(func: (...args: any[]) => Promise<T>): (...args: any[]) => PromiseBB<T> {
-  return (...args: any[]) => PromiseBB.resolve(func(...args));
+export function bbProm<T>(func: (...args: any[]) => Promise<T>): (...args: any[]) => Promise<T> {
+  return (...args: any[]) => Promise.resolve(func(...args));
 }
 
 export function getUnfulfilledNotificationId(collectionId: string) {

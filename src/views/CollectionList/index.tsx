@@ -4,6 +4,7 @@ import { doExportToAPI } from '../../collectionExport';
 import { INSTALLING_NOTIFICATION_ID, MOD_TYPE, NAMESPACE, TOS_URL} from '../../constants';
 import { findExtensions, IExtensionFeature } from '../../util/extension';
 import InstallDriver from '../../util/InstallDriver';
+import { promiseMapSeries } from '../../util/bluebird-migration-helpers.local';
 
 import { IPathTools } from '../CollectionPageEdit/FileOverrides';
 import CollectionEdit from '../CollectionPageEdit';
@@ -13,7 +14,7 @@ import StartPage from './StartPage';
 import { IRating, IRevision } from '@nexusmods/nexus-api';
 import I18next from 'i18next';
 import * as React from 'react';
-import Bluebird from 'bluebird';
+// TODO: Remove Bluebird import - using native Promise;
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as Redux from 'redux';
@@ -90,7 +91,7 @@ class CollectionsMainPage extends ComponentEx<ICollectionsMainPageProps, ICompon
 
     this.mMatchRefDebouncer = new util.Debouncer(() => {
       this.nextState.matchedReferences = this.updateMatchedReferences(this.props);
-      return Bluebird.resolve();
+      return Promise.resolve();
     }, 2000);
   }
 
@@ -473,13 +474,13 @@ class CollectionsMainPage extends ComponentEx<ICollectionsMainPageProps, ICompon
       return prev;
     }, { requires: [], recommends: [] });
 
-    const eaa = (ruleList: types.IModRule[], recommended: boolean): Bluebird<void> => {
+    const eaa = (ruleList: types.IModRule[], recommended: boolean): Promise<void> => {
       if (ruleList.length === 0) {
-        return Bluebird.resolve();
+        return Promise.resolve();
       }
-      return Bluebird.resolve(
+      return Promise.resolve(
         api.emitAndAwait('install-from-dependencies', collectionId, ruleList, recommended)
-      ) as Bluebird<void>;
+      ) as Promise<void>;
     };
 
     eaa(ruleGroups.requires, false)

@@ -1,5 +1,4 @@
 import { ICollection, IDownloadURL, IRevision } from '@nexusmods/nexus-api';
-import Bluebird from 'bluebird';
 import { actions, selectors, types, util } from 'vortex-api';
 import InstallDriver from './util/InstallDriver';
 import showChangelog from './views/InstallDialog/InstallChangelogDialog';
@@ -189,7 +188,7 @@ export function onCollectionUpdate(api: types.IExtensionApi,
     }
 
     driver.prepare(() =>
-      Bluebird.resolve(collectionUpdate(api, gameId, collectionSlug,
+      Promise.resolve(collectionUpdate(api, gameId, collectionSlug,
                                         revisionNumber.toString(), oldModId))
         .then(() => {
           cb?.(null);

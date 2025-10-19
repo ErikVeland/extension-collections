@@ -1,9 +1,9 @@
-@import '../../src/stylesheets/variables.scss';
-@import '../../src/stylesheets/details.scss';
-@import '../../src/stylesheets/style.scss';
-@import '../../src/stylesheets/bootstrap/bootstrap/variables';
-@import '../../src/stylesheets/bootstrap/bootstrap/mixins';
-@import '../../src/stylesheets/bootstrap/bootstrap/type';
+@import 'variables';
+@import 'details';
+@import 'style';
+@import 'bootstrap/bootstrap/variables';
+@import 'bootstrap/bootstrap/mixins';
+@import 'bootstrap/bootstrap/type';
 
 $border-radius: 8px;
 $collection-thumbnail-width: 230px;

@@ -2,7 +2,6 @@ import * as bsdiffT from 'bsdiff-node';
 import * as crc32 from 'crc-32';
 import * as path from 'path';
 import { fs, log, selectors, types, util } from 'vortex-api';
-import Bluebird from 'bluebird';
 import { MAX_PATCH_SIZE, PATCHES_PATH, PATCH_OVERHEAD } from '../constants';
 
 const bsdiff = util.lazyRequire<typeof bsdiffT>(() => require('bsdiff-node'));
@@ -25,7 +24,7 @@ const queue = util.makeQueue<{ [filePath: string]: string }>();
 export function scanForDiffs(api: types.IExtensionApi, gameId: string,
                                    modId: string, destPath: string,
                                    onProgress: (percent: number, text: string) => void)
-                                   : Bluebird<{ [filePath: string]: string }> {
+                                   : Promise<{ [filePath: string]: string }> {
   const state = api.getState();
   const mod = state.persistent.mods[gameId][modId];
 
@@ -40,7 +39,7 @@ export function scanForDiffs(api: types.IExtensionApi, gameId: string,
 
   const choices = mod.attributes?.installerChoices;
 
-  return queue(() => new Bluebird<{ [filePath: string]: string }>((resolve, reject) => {
+  return queue(() => new Promise<{ [filePath: string]: string }>((resolve, reject) => {
     api.events.emit('simulate-installer', gameId, mod.archiveId, { choices },
       async (instRes: types.IInstallResult, tempPath: string) => {
         try {

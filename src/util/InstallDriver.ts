@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as nexusApi from '@nexusmods/nexus-api';
-import Bluebird from 'bluebird';
-const Promise = Bluebird;
+
 import * as path from 'path';
 import { actions, log, selectors, types, util, } from 'vortex-api';
 import { setPendingVote } from '../actions/persistent';
@@ -17,6 +16,7 @@ import * as installActions from '../actions/installTracking';
 import { CollectionModStatus, generateSessionId } from '../types/ICollectionInstallState';
 
 import * as _ from 'lodash';
+import { promiseMapSeries } from '../../../src/util/bluebird-migration-helpers.local';
 
 export type Step = 'prepare' | 'changelog' | 'query' | 'start' | 'disclaimer' | 'installing' | 'recommendations' | 'review';
 
@@ -39,8 +39,8 @@ class InstallDriver {
   private mInfoCache: InfoCache;
   private mTotalSize: number;
   private mOnStop: () => void;
-  // Use Bluebird internally to match existing code in this extension
-  private mPrepare: Bluebird<void> = Bluebird.resolve();
+  // Use native Promise instead of Bluebird
+  private mPrepare: Promise<void> = Promise.resolve();
   private mTimeStarted: number;
 
   private mStateUpdates: any[] = [];
@@ -130,7 +130,7 @@ class InstallDriver {
       if (download !== undefined) {
         this.mInstallingMod = download.localPath;
       }
-      return Bluebird.resolve();
+      return Promise.resolve();
     });
 
     api.events.on('did-install-mod', (gameId: string, archiveId: string, modId: string) => {
@@ -249,13 +249,13 @@ class InstallDriver {
       });
   }
 
-  public async prepare(func: () => Bluebird<void> | Promise<void>) {
+  public async prepare(func: () => Promise<void>) {
     this.mPrepare = this.mPrepare.then(() => func());
   }
 
   public async query(profile: types.IProfile, collection: types.IMod) {
     await this.mPrepare;
-    this.mPrepare = Bluebird.resolve();
+    this.mPrepare = Promise.resolve();
 
     if (collection?.archiveId === undefined) {
       return;
@@ -278,7 +278,7 @@ class InstallDriver {
 
   public async start(profile: types.IProfile, collection: types.IMod) {
     await this.mPrepare;
-    this.mPrepare = Bluebird.resolve();
+    this.mPrepare = Promise.resolve();
 
     if (collection?.archiveId === undefined) {
       return;
@@ -626,7 +626,7 @@ class InstallDriver {
     // suppress plugins-changed event to avoid constantly running expensive callbacks
     // until onStop gets called
     this.mApi.ext.withSuppressedTests?.(['plugins-changed', 'settings-changed', 'mod-activated', 'mod-installed'], () =>
-      new Bluebird(resolve => {
+      new Promise(resolve => {
         this.mOnStop = () => {
           resolve(undefined);
           this.mOnStop = undefined;

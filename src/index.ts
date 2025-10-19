@@ -35,7 +35,7 @@ import initIniTweaks from './initweaks';
 import initTools from './tools';
 
 import * as nexusApi from '@nexusmods/nexus-api';
-import PromiseBB from 'bluebird';
+// TODO: Remove Bluebird import - using native Promise;
 import * as _ from 'lodash';
 import memoize from 'memoize-one';
 import * as path from 'path';
@@ -97,17 +97,17 @@ function makeDidRemoveMods() {
 function makeOnUnfulfilledRules(api: types.IExtensionApi) {
   const reported = new Set<string>();
 
-  return (profileId: string, modId: string, rules: types.IModRule[]): PromiseBB<boolean> => {
+  return (profileId: string, modId: string, rules: types.IModRule[]): Promise<boolean> => {
     const state: types.IState = api.store.getState();
 
     const profile = selectors.profileById(state, profileId);
     const gameId = profile.gameId;
     if (gameId !== selectors.activeGameId(state)) {
-      return PromiseBB.resolve(false);
+      return Promise.resolve(false);
     }
 
     if (modsBeingRemoved.has(makeModKey(gameId, modId))) {
-      return PromiseBB.resolve(false);
+      return Promise.resolve(false);
     }
 
     const collection: types.IMod =
@@ -162,9 +162,9 @@ function makeOnUnfulfilledRules(api: types.IExtensionApi) {
         message: util.renderModName(collection),
         actions: notiActions,
       });
-      return PromiseBB.resolve(true);
+      return Promise.resolve(true);
     } else {
-      return PromiseBB.resolve(false);
+      return Promise.resolve(false);
     }
   };
 }
@@ -430,7 +430,7 @@ async function removeCollection(api: types.IExtensionApi,
 
 function genAttributeExtractor(api: types.IExtensionApi) {
   // tslint:disable-next-line:no-shadowed-variable
-  return (modInfo: any, modPath: string): PromiseBB<{ [key: string]: any }> => {
+  return (modInfo: any, modPath: string): Promise<{ [key: string]: any }> => {
     const collectionId = modInfo.download?.modInfo?.nexus?.ids?.collectionId;
     const revisionId = modInfo.download?.modInfo?.nexus?.ids?.revisionId;
     const collectionSlug = modInfo.download?.modInfo?.nexus?.ids?.collectionSlug;
@@ -445,7 +445,7 @@ function genAttributeExtractor(api: types.IExtensionApi) {
       referenceTag,
     };
 
-    return PromiseBB.resolve(result);
+    return Promise.resolve(result);
   };
 }
 
@@ -547,7 +547,7 @@ async function updateMeta(api: types.IExtensionApi) {
             description: info.collection.description,
             shortDescription: info.collection.summary,
             newestFileId: currentRevision?.revisionNumber,
-            newestVersion: currentRevision?.revisionNumber?.toString?.(),
+            newestVersion: info.revisionNumber?.toString?.(),
             metadata: info.metadata,
             rating: info.rating,
           }));
@@ -688,7 +688,7 @@ function register(context: types.IExtensionContext,
   });
 
   context.registerModType(MOD_TYPE, 200, () => true,
-    () => undefined, () => PromiseBB.resolve(false), {
+    () => undefined, () => Promise.resolve(false), {
     name: 'Collection',
     customDependencyManagement: true,
     noConflicts: true,

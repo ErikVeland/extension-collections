@@ -14,7 +14,7 @@ import CollectionOverviewSelection from './CollectionOverviewSelection';
 import CollectionProgress from './CollectionProgress';
 
 import { ICollection, ICollectionRevisionMod, IModFile, IRevision, RatingOptions } from '@nexusmods/nexus-api';
-import Promise from 'bluebird';
+// TODO: Remove Bluebird import - using native Promise;
 import i18next from 'i18next';
 import * as _ from 'lodash';
 import memoizeOne from 'memoize-one';
